@@ -1,0 +1,6 @@
+### All those paths MUST be properly configured to be able to build JZMQ !
+
+INSTALL_PATH=/opt/android-root/lib/zmq/output-arm
+JDK6_PATH=/usr/lib/jvm/java-6-openjdk/
+TOOLCHAIN_TOP=/home/hqdk3480/Documents/tmp/android-zeromq-scripts/ndk-r6-stdalone-toolchain/arm-linux-androideabi-4.4.3
+
