@@ -9,4 +9,4 @@ CC=$tools_prefix-gcc \
 	AR=$tools_prefix-ar \
 	AS=$tools_prefix-as \
 	RANLIB=$tools_prefix-ranlib \
-	./configure --target=arm-linux-androideabi --host=arm-linux-androideabi --prefix=$INSTALL_PATH --enable-elf-shlibs
+	./configure --target=arm-linux-androideabi --host=arm-linux-androideabi --prefix=$INSTALL_PATH

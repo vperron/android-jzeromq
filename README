@@ -1,4 +1,11 @@
-In order to compile jzmq for Android you need to get the stable version of libuuid, zmq and jzmq.
+jzmq libraries for Android
+==========================
+
+This package is intended to easily cross-compile the jzmq shared object and java 
+sources for use within Android. 
+
+Everything comes preconfigured without any patch to the sources.
+
 
 The current package uses
 ------------------------
@@ -24,64 +31,14 @@ Declare an environment variable to give
 Set up your config file
 	Edit the ./configure_scripts/config file to set up your environment
 
-
-3- Build the libuuid
---------------------
-copy the script ./android-zeromq-scripts/configure_scripts/android_make_uuid.sh into the android-zeromq-scripts/e2fsprogs folder
-execute it, it will configure the folder for android cross compilation
-
-cd lib/uuid
-make
-sudo make install
-
-NOTE: the target has to be arm-linux-androideabi, this will automatically define ZMQ_HAVE_ANDROID = 1 in the code
+Install the prerequisites
+	Please install autoconf, automake and libtool.
 
 
-4- Build libzmq
----------------
-copy the script ./android-zeromq-scripts/configure_scripts/android_make_zmq.sh into the android-zeromq-scripts/zeromq-2.2.0 folder
-execute it, it will configure the folder for android cross compilation
+3- Run Make
+-----------
 
-make
-sudo make install
+The Makefile should build everything accordingly.
 
-NOTE: the target has to be arm-linux-androideabi
-
-
-5- Build libjzmq
-----------------
-copy the script ./android-zeromq-scripts/configure_scripts/android_make_jzmq.sh into the android-zeromq-scripts/jzmq folder
-execute it, it will configure the folder for android cross compilation
-
-make
-make install
-
-NOTE: the target has to be arm-linux-androideabi
-
-
-6- Use the jzmq library in your Android Eclipse project
--------------------------------------------------------
-The android framework tells you to put your library files into the /libs/armeabi folder.
-However if the library is not a .so file, for example .so.3.0.0, the library is not included into the .apk file.
-
-One clean solution is to embbed the libzmq library and the libuuid library into the libjzmq.so file.
-to check if everything is embedded properly, you need to use the toolchain nm command on the libjzmq.so file.
-In order to embbed the libs, we have to use the -Wl,-Bstatic -lzmq -Wl,-Bdynamic option when compiling the jzmq library.
-We also need to do the same when we previously build the libzmq library: -Wl,-Bstatic luuid -Bdynamic
-
-
-7- Install libraries on your Rooted android device
---------------------------------------------------
-If we don't embbed the libraries within libjzmq, we need to put the necessary libraries into the system/lib android smartphone folder.
-in order to do that, we have to root the phone (have a look on the web)
-then, if we want to be able to write in this system folder, we have to remount the folders.
-	adb remount
-
-to push the file into the folder
-	adb push source_file /system/lib/
-
-if you need to edit the file, just access your android phone shell
-	adb shell
-
-
-
+Please understand that if your output folder is not writable, you'll have
+to enter your administrator password when the Makefile will install the libraries.
