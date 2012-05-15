@@ -2,7 +2,7 @@ In order to compile jzmq for Android you need to get the stable version of libuu
 
 The current package uses
 ------------------------
-zmq 2.1.11 STABLE
+zmq 2.2 STABLE
 uuid 1.42.1 STABLE
 jzmq 1.0.0 STABLE
 
@@ -13,7 +13,7 @@ The  steps
 1- Build your standalone ndk package
 ------------------------------------
 execute make-standalone-toolchain.sh
-for our current build we used the ndk r6
+for our current build we used the ndk r8
 
 2- Set up your environment
 --------------------------
@@ -30,19 +30,20 @@ Set up your config file
 copy the script ./android-zeromq-scripts/configure_scripts/android_make_uuid.sh into the android-zeromq-scripts/e2fsprogs folder
 execute it, it will configure the folder for android cross compilation
 
+cd lib/uuid
 make
-make install
+sudo make install
 
 NOTE: the target has to be arm-linux-androideabi, this will automatically define ZMQ_HAVE_ANDROID = 1 in the code
 
 
 4- Build libzmq
 ---------------
-copy the script ./android-zeromq-scripts/configure_scripts/android_make_zmq.sh into the android-zeromq-scripts/zeromq-2.1.11 folder
+copy the script ./android-zeromq-scripts/configure_scripts/android_make_zmq.sh into the android-zeromq-scripts/zeromq-2.2.0 folder
 execute it, it will configure the folder for android cross compilation
 
 make
-make install
+sudo make install
 
 NOTE: the target has to be arm-linux-androideabi
 
