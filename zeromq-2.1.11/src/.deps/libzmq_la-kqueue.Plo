@@ -1,3 +1,0 @@
-libzmq_la-kqueue.lo: kqueue.cpp platform.hpp
-
-platform.hpp:
