@@ -6,7 +6,8 @@ include_dir=$INSTALL_PATH/include
 lib_dir=$INSTALL_PATH/lib
 tools_prefix=$TOOLCHAIN_TOP/bin/arm-linux-androideabi
 
-LD_LIBRARY_PATH=$lib_dir  \
+patch -p0 < zmq_android.patch && \
+	LD_LIBRARY_PATH=$lib_dir  \
 	CFLAGS="-fPIC -I$include_dir -I$TOOLCHAIN_TOP/arm-none-linux-gnueabi/include -Wl,-rpath=$TOOLCHAIN_TOP/arm-none-linux-gnueabi/lib" \
 	CPPFLAGS="-I$include_dir -fvisibility=default" \
 	LDFLAGS="-L$lib_dir -lgcc -Wl,-rpath=$lib_dir -Wl,-Bstatic -luuid -Wl,-Bdynamic" \

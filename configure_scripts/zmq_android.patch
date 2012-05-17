@@ -1,0 +1,59 @@
+From eeebb88c33f7020cab86079cc90b039fd36e69d4 Mon Sep 17 00:00:00 2001
+From: Javier Lopez <jlopex@cozybit.com>
+Date: Thu, 15 Mar 2012 20:31:50 -0700
+Subject: [PATCH] Fixes zmq-lib 2.1 not compiling on Android-ndk
+
+According to the libc documentation S_IWRITE in only for BSD
+compatibility:
+
+http://www.gnu.org/s/hello/manual/libc/Permission-Bits.html
+
+This patch adds some preprocesor checks to determine platform and
+uses correct file access mode to crosscompile zeromq on Android NDK.
+
+- For Linux and Android S_IWUSR is used.
+- For other platforms S_IWRITE is used.
+
+Signed-off-by: Javier Lopez <jlopex@cozybit.com>
+---
+ src/options.cpp |    9 +++++++--
+ 1 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/src/options.cpp b/src/options.cpp
+index 952907b..751f7fa 100644
+--- a/src/options.cpp
++++ b/src/options.cpp
+@@ -68,7 +68,12 @@ int zmq::options_t::setsockopt (int option_, const void *optval_,
+         }
+         //  Check that SWAP directory (.) is writable
+         struct stat stat_buf;
++#if (defined __ANDROID__ || defined __linux__)
++	if (stat (".", &stat_buf) || ((stat_buf.st_mode & S_IWUSR) == 0)) {
++#else
+         if (stat (".", &stat_buf) || ((stat_buf.st_mode & S_IWRITE) == 0)) {
++#endif
++
+             errno = EACCES;
+             return -1;
+         }
+@@ -103,7 +108,7 @@ int zmq::options_t::setsockopt (int option_, const void *optval_,
+         }
+         rate = (uint32_t) *((int64_t*) optval_);
+         return 0;
+-        
++
+     case ZMQ_RECOVERY_IVL:
+         if (optvallen_ != sizeof (int64_t)  || *((int64_t*) optval_) < 0) {
+             errno = EINVAL;
+@@ -246,7 +251,7 @@ int zmq::options_t::getsockopt (int option_, void *optval_, size_t *optvallen_)
+         *((int64_t*) optval_) = rate;
+         *optvallen_ = sizeof (int64_t);
+         return 0;
+-        
++
+     case ZMQ_RECOVERY_IVL:
+         if (*optvallen_ < sizeof (int64_t)) {
+             errno = EINVAL;
+-- 
+1.7.5.4
+

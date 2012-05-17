@@ -5,6 +5,10 @@ TARGET := $(INSTALL_PATH)/libjzmq.so
 LIBZMQ := $(INSTALL_PATH)/lib/libzmq.a
 LIBUUID := $(INSTALL_PATH)/lib/libuuid.a
 
+ZMQ_DIR := zeromq-2.2.0
+JZMQ_DIR := jzmq
+UUID_DIR := e2fsprogs
+
 TOP_DIR := $(shell pwd)
 
 .PHONY: all clean
@@ -21,10 +25,11 @@ endef
 all: $(TARGET)
 
 $(TARGET): $(LIBZMQ)
-	$(call make_component,android_make_jzmq.sh,jzmq,.)
+	$(call make_component,android_make_jzmq.sh,$(JZMQ_DIR),.)
 
 $(LIBZMQ): $(LIBUUID)
-	$(call make_component,android_make_zmq.sh,zeromq-2.2.0,.)
+	cp $(TOP_DIR)/configure_scripts/zmq_android.patch $(ZMQ_DIR)
+	$(call make_component,android_make_zmq.sh,$(ZMQ_DIR),.)
 
 $(LIBUUID):
-	$(call make_component,android_make_uuid.sh,e2fsprogs,lib/uuid)
+	$(call make_component,android_make_uuid.sh,$(UUID_DIR),lib/uuid)
