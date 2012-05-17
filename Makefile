@@ -1,19 +1,17 @@
-
--include ${ZMQ_ANDROID_CONFIG}
+TOP_DIR := $(shell pwd)
 
 TARGET := $(INSTALL_PATH)/libjzmq.so
 LIBZMQ := $(INSTALL_PATH)/lib/libzmq.a
 LIBUUID := $(INSTALL_PATH)/lib/libuuid.a
 
-ZMQ_DIR := zeromq-2.2.0
-JZMQ_DIR := zeromq-jzmq-8522576
-UUID_DIR := e2fsprogs-1.42.3
+zmq_dir := zeromq-2.2.0
+jzmq_dir := zeromq-jzmq-8522576
+uuid_dir := e2fsprogs-1.42.3
 
 zmq_url := http://download.zeromq.org/zeromq-2.2.0.tar.gz
 jzmq_url := https://github.com/zeromq/jzmq/tarball/v1.0.0
 uuid_url := http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v1.42.3/e2fsprogs-1.42.3.tar.gz
 
-TOP_DIR := $(shell pwd)
 
 .PHONY: all clean prereq
 
@@ -28,18 +26,17 @@ endef
 
 all: $(TARGET)
 
-prereq: $(ZMQ_DIR) $(JZMQ_DIR) $(UUID_DIR)
+prereq: $(zmq_dir) $(jzmq_dir) $(uuid_dir)
 
 
 # TODO: Replace those rules with implicits
-
-$(ZMQ_DIR): $(notdir $(zmq_url))
+$(zmq_dir): $(notdir $(zmq_url))
 	tar xzf $<
 
-$(JZMQ_DIR): $(notdir $(jzmq_url))
+$(jzmq_dir): $(notdir $(jzmq_url))
 	tar xzf $<
 
-$(UUID_DIR): $(notdir $(uuid_url))
+$(uuid_dir): $(notdir $(uuid_url))
 	tar xzf $<
 
 $(notdir $(zmq_url)):
@@ -52,11 +49,15 @@ $(notdir $(uuid_url)):
 	wget $(uuid_url)
 
 $(TARGET): $(LIBZMQ)
-	$(call make_component,android_make_jzmq.sh,$(JZMQ_DIR),.)
+	$(call make_component,android_make_jzmq.sh,$(jzmq_dir),.)
 
 $(LIBZMQ): $(LIBUUID)
-	cp $(TOP_DIR)/configure_scripts/zmq_android.patch $(ZMQ_DIR)
-	$(call make_component,android_make_zmq.sh,$(ZMQ_DIR),.)
+	$(call make_component,android_make_zmq.sh,$(zmq_dir),.)
 
 $(LIBUUID): prereq
-	$(call make_component,android_make_uuid.sh,$(UUID_DIR),lib/uuid)
+	$(call make_component,android_make_uuid.sh,$(uuid_dir),lib/uuid)
+
+clean:
+	rm -rf $(jzmq_dir)
+	rm -rf $(zmq_dir)
+	rm -rf $(uuid_dir)

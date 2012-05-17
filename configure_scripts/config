@@ -1,6 +1,0 @@
-### All those paths MUST be properly configured to be able to build JZMQ !
-
-INSTALL_PATH=/opt/android-jzmq/output-arm
-JDK6_PATH=/home/victor/work/bin/jdk1.6.0_30
-TOOLCHAIN_TOP=/home/victor/work/bin/arm-linux-androideabi-4.4.3
-

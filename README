@@ -4,41 +4,51 @@ jzmq libraries for Android
 This package is intended to easily cross-compile the jzmq shared object and java 
 sources for use within Android. 
 
-Everything comes preconfigured without any patch to the sources.
+You will end up with the genrated Java source files for jzmq and a shared library object,
+namely libjzmq.so whil will self-contain jzmq wrapper, zeromq library and libtool dependency.
+
+Hence, you can use it directly inside your APK for loading.
 
 
-The current package uses
-------------------------
-zmq 2.2 STABLE
-uuid 1.42.1 STABLE
-jzmq 1.0.0 STABLE
+Automatically downloaded packages
+---------------------------------
+e2fsprogs-1.43.1
+zeromq-2.2.0
+zeromq-jzmq-1.0.0
 
-***********
-The  steps
-***********
-
-1- Build your standalone ndk package
-------------------------------------
-execute make-standalone-toolchain.sh
-for our current build we used the ndk r8
-
-2- Set up your environment
---------------------------
-Declare an environment variable to give
-	export ZMQ_ANDROID_CONFIG=absolute_path_to_your_config_file
-	located in the package under the configure_scripts folder
-
-Set up your config file
-	Edit the ./configure_scripts/config file to set up your environment
-
-Install the prerequisites
-	Please install autoconf, automake and libtool.
+All of them, stable version.
 
 
-3- Run Make
------------
 
-The Makefile should build everything accordingly.
+Building steps
+--------------
 
-Please understand that if your output folder is not writable, you'll have
-to enter your administrator password when the Makefile will install the libraries.
+### Build the NDK ARM toolchain
+
+* Download the NDK from Google.
+* In the uncompressed folder, execute
+> sh build/tools/make-standalone-toolchain.sh
+* It builds a toolchain that you will have to uncompress somewhere
+> cd /opt
+> tar vjxf arm-linux-androideabi-4.4.3.tar.bz2
+* You now have the path /opt/arm-linux-androideabi-4.4.3 as toolchain path.
+
+### Download the JDK from Oracle
+* Download and install a JDK from Oracle.
+* A 32-bit JDK-1.6.30 is recommended.
+
+### Setup your environment
+> export JAVA_HOME=$HOME/work/bin/jdk1.6.0_30
+> export ARM_TOOLCHAIN=/opt/arm-linux-androideabi-4.4.3
+> export INSTALL_PATH=/opt/android-jzmq/output-arm
+
+### Install the prerequisites
+> sudo apt-get install autoconf automake libtool
+
+### Make
+> make all
+
+or, if your $INSTALL_PATH is not directly writeable,
+
+> sudo make all
+
