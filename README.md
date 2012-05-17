@@ -12,9 +12,11 @@ Hence, you can use it directly inside your APK for loading.
 
 Automatically downloaded packages
 ---------------------------------
-e2fsprogs-1.43.1
-zeromq-2.2.0
-zeromq-jzmq-1.0.0
+> e2fsprogs-1.43.1
+
+> zeromq-2.2.0
+
+> zeromq-jzmq-1.0.0
 
 All of them, stable version.
 
@@ -27,10 +29,15 @@ Building steps
 
 * Download the NDK from Google.
 * In the uncompressed folder, execute
+
 > sh build/tools/make-standalone-toolchain.sh
+
 * It builds a toolchain that you will have to uncompress somewhere
+
 > cd /opt
+
 > tar vjxf arm-linux-androideabi-4.4.3.tar.bz2
+
 * You now have the path /opt/arm-linux-androideabi-4.4.3 as toolchain path.
 
 ### Download the JDK from Oracle
@@ -38,14 +45,19 @@ Building steps
 * A 32-bit JDK-1.6.30 is recommended.
 
 ### Setup your environment
+
 > export JAVA_HOME=$HOME/work/bin/jdk1.6.0_30
+
 > export ARM_TOOLCHAIN=/opt/arm-linux-androideabi-4.4.3
+
 > export INSTALL_PATH=/opt/android-jzmq/output-arm
 
 ### Install the prerequisites
+
 > sudo apt-get install autoconf automake libtool
 
 ### Make
+
 > make all
 
 or, if your $INSTALL_PATH is not directly writeable,
