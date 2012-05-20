@@ -52,7 +52,7 @@ Building steps
 
 > export INSTALL_PATH=/opt/android-jzmq/output-arm
 
-Please select an INSTALL_PATH that is writeable by you.
+Please select an INSTALL\_PATH that is writeable by you.
 
 ### Install the prerequisites
 
@@ -62,7 +62,17 @@ Please select an INSTALL_PATH that is writeable by you.
 
 > make all
 
-or, if your $INSTALL_PATH is not directly writeable,
+or, if your $INSTALL\_PATH is not directly writeable,
 
 > sudo make all
 
+
+Using it
+--------
+
+You will find in your INSTALL\_PATH:
+
+* a *lib/libjzmq.so* file to copy to <yourandroidproject>/libs/armeabi
+* a *share/java/zmq.jar* file to import into your project (In Eclipse, also tick _Order and Export_ accordingly)
+
+You can start using ZeroMQ in your project.
