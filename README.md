@@ -52,6 +52,8 @@ Building steps
 
 > export INSTALL_PATH=/opt/android-jzmq/output-arm
 
+Please select an INSTALL_PATH that is writeable by you.
+
 ### Install the prerequisites
 
 > sudo apt-get install autoconf automake libtool

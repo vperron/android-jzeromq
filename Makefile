@@ -1,6 +1,6 @@
 TOP_DIR := $(shell pwd)
 
-TARGET := $(INSTALL_PATH)/libjzmq.so
+TARGET := $(INSTALL_PATH)/lib/libjzmq.so
 LIBZMQ := $(INSTALL_PATH)/lib/libzmq.a
 LIBUUID := $(INSTALL_PATH)/lib/libuuid.a
 
@@ -13,7 +13,7 @@ jzmq_url := https://github.com/zeromq/jzmq/tarball/v1.0.0
 uuid_url := http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v1.42.3/e2fsprogs-1.42.3.tar.gz
 
 
-.PHONY: all clean prereq
+.PHONY: all clean prereq cleanall
 
 define make_component
 	cp $(TOP_DIR)/configure_scripts/$1 $2 && \
@@ -21,10 +21,10 @@ define make_component
 		./$1 && \
 		cd $3 && \
 		$(MAKE) && \
-		sudo $(MAKE) install
+		$(MAKE) install
 endef
 
-all: $(TARGET)
+all: | $(TARGET)
 
 prereq: $(zmq_dir) $(jzmq_dir) $(uuid_dir)
 
@@ -48,16 +48,22 @@ $(notdir $(jzmq_url)):
 $(notdir $(uuid_url)):
 	wget $(uuid_url)
 
-$(TARGET): $(LIBZMQ)
+$(TARGET): | $(LIBZMQ)
 	$(call make_component,android_make_jzmq.sh,$(jzmq_dir),.)
 
-$(LIBZMQ): $(LIBUUID)
+$(LIBZMQ): | $(LIBUUID)
 	$(call make_component,android_make_zmq.sh,$(zmq_dir),.)
 
-$(LIBUUID): prereq
+$(LIBUUID): | prereq
 	$(call make_component,android_make_uuid.sh,$(uuid_dir),lib/uuid)
 
 clean:
 	rm -rf $(jzmq_dir)
 	rm -rf $(zmq_dir)
 	rm -rf $(uuid_dir)
+
+cleanall: clean
+	rm -rf $(INSTALL_PATH)
+	rm -rf $(notdir $(zmq_url))
+	rm -rf $(notdir $(jzmq_url))
+	rm -rf $(notdir $(uuid_url))

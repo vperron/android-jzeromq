@@ -7,9 +7,6 @@ tools_prefix=$ARM_TOOLCHAIN/bin/arm-linux-androideabi
 
 LD_LIBRARY_PATH=$lib_dir:$LD_LIBRARY_PATH
 
-make clean && \
-	find . -name "*.class" -o -name "jzmq-headers.zip" -o -name "zmq.jar" -delete
-
 
 # Avoid version numbering
 sed -i -e 's/^libjzmq_la_LDFLAGS = .*$/libjzmq_la_LDFLAGS = -avoid-version/' src/Makefile.am
@@ -29,7 +26,12 @@ if [ ! -f .is_configured ]; then \
 	AR=$tools_prefix-ar \
 	AS=$tools_prefix-as \
 	RANLIB=$tools_prefix-ranlib \
-	./configure --target=arm-linux-gnueabi --host=arm-linux-gnueabi --prefix=$INSTALL_PATH --with-zeromq=$INSTALL_PATH &&
+	./configure --target=arm-linux-gnueabi --host=arm-linux-gnueabi --prefix=$INSTALL_PATH --with-zeromq=$INSTALL_PATH && \
+	touch src/classdist_noinst.stamp && \
+	cd src && CLASSPATH=.:./.:$CLASSPATH javac -d . org/zeromq/ZMQ.java \
+		org/zeromq/ZMQException.java org/zeromq/ZMQQueue.java org/zeromq/ZMQForwarder.java \
+		org/zeromq/ZMQStreamer.java org/zeromq/ZContext.java org/zeromq/ZFrame.java org/zeromq/ZMsg.java && \
+		cd .. && \
 	touch .is_configured; fi
 
 
