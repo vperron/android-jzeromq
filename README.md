@@ -76,3 +76,7 @@ You will find in your INSTALL\_PATH:
 * a *share/java/zmq.jar* file to import into your project (In Eclipse, also tick _Order and Export_ accordingly)
 
 You can start using ZeroMQ in your project.
+
+License
+-------
+LGPL
